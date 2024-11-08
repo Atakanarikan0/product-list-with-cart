@@ -73,7 +73,74 @@ let desserts = [
   },
 ];
 
+
+// Basket
+
+const basket = [
+  {
+    id: 1,
+    title: "Waffle with Berries",
+    price: "6.50",
+    quantity: 0,
+ },
+ {
+   id: 2,
+   title: "Vanilla Bean Crème Brûlée",
+   price: "7.00",
+   quantity: 0,
+ },
+ {
+   id: 3,
+   title: "Macaron Mix of Five",
+   price: "8.00",
+   quantity: 0,
+ },
+ {
+   id: 4,
+   title: "Classic Tiramisu",
+   price: "5.50",
+   quantity: 0,
+ },
+ {
+   id: 5,
+   title: "Pistachio Baklava",
+   price: "4.00",
+   quantity: 0,
+ },
+ {
+   id: 6,
+   title: "Lemon Meringue Pie",
+   price: "5.00",
+   quantity: 0,
+ },
+ {
+   id: 7,
+   title: "Red Velvet Cake",
+   price: "4.50",
+   quantity: 0,
+ },
+ {
+   id: 8,
+   title: "Salted Caramel Brownie",
+   price: "5.50",
+   quantity: 0,
+
+ },
+ {
+   id: 9,
+   title: "Vanilla Panna Cotta",
+   price: "6.50",
+   quantity: 0,
+
+ },
+]
 const dessertGroup = document.querySelector(".dessert-group");
+
+let total = 0;
+let totalPrice = 0;
+
+
+
 
 function addProduct() {
   for(const dessert of desserts) {
@@ -81,8 +148,8 @@ function addProduct() {
     `
       <div class="dessert">
         <div class="product-img">
-          <img src=${dessert.img} alt="">
-          <button class="btn-add-cart"><img src="assets/img/shopping-icon.svg" alt="">Add to Cart</button>
+          <img src=${dessert.img} class="card-img" alt="">
+          <button class="btn-add-cart" data-id=${dessert.id}><img src="assets/img/shopping-icon.svg" alt="">Add to Cart</button>
         </div>
         <h6>${dessert.category}</h6>
         <h3>${dessert.title}</h3>
@@ -90,84 +157,62 @@ function addProduct() {
       </div>
     `
   }
+  const addToCartBtns = document.querySelectorAll(".btn-add-cart");
+  for(const addToCartBtn of addToCartBtns) {
+    addToCartBtn.addEventListener('click', handleAddBtn)
+  }
 }
 addProduct()
 
-const addToCartBtns = document.querySelectorAll(".btn-add-cart");
 const emptyBasket = document.querySelector(".empty-basket");
 const order = document.querySelector(".order");
 const cardItems = document.querySelector(".card-items");
 
 
-for(const addToCartBtn of addToCartBtns) {
-  let count = 0;
-  addToCartBtn.addEventListener('click', function() {
-    const dessertInfo = document.querySelector(".dessert"); 
-    const dessertCtgry = dessertInfo.children[1].innerText; 
-    const dessertName = dessertInfo.children[2].innerText; 
-    let dessertPrice = dessertInfo.children[3].innerText; 
-    const dessertPriceNmbr = Number(dessertPrice)
-    let total = count * dessertPriceNmbr
+function handleAddBtn() {
+  let productTitle = this.parentElement.parentElement.children[2];
+  // let dessertPrice = this.parentElement.parentElement.children[4];
+  for (const item of basket) {
+    if(productTitle.innerText === item.title) {
+      item.quantity++;
+      // total += item.quantity;
+      // totalPrice += (item.quantity * item.price)
+      cardItems.innerHTML = "";
 
-    console.log(dessertCtgry);
-    count++;
-    emptyBasket.style.display = "none"
-    order.style.display = "block"
-    cardItems.innerHTML +=
-    `
-      <li class="card-item">
-        <div class="product-info">
-          <span class="item-name">${dessertName}</span>
-          <div>
-            <span class="item-piece">${count}x</span>
-            <span class="item-price">${dessertPrice}</span>
-            <span class="item-total">${total}</span>
-          </div>
-        </div>
-        <button class="remove-btn"><img src="assets/img/remove-btn.svg" alt=""></button>
-      </li>
-    `
-
-    const productImg = addToCartBtn.parentElement.childNodes[1];
-    productImg.classList.add("active");
-    if(productImg.classList.contains("active")) {
       this.innerHTML = 
       `
-        <button id="minusBtn"><img src="assets/img/minus-icon.svg" alt=""></button>
-        ${count}
-        <button id="plusBtn"><img src="assets/img/plus-icon.svg" alt=""></button>
+      <button id="minusBtn"><img src="assets/img/minus-icon.svg" alt=""></button>
+      ${item.quantity}
+      <button id="plusBtn"><img src="assets/img/plus-icon.svg" alt=""></button>
       `
       this.classList.add("active-btn"); 
-      productControl(count)
-    }
-    
-  })
+      const cardImg = this.parentElement.querySelector(".card-img");
+      cardImg.classList.add("active");
+      for(const item of basket ) {
+        if(item.quantity > 0) {
+          emptyBasket.style.display = "none"
+          order.style.display = "block"
+          cardItems.innerHTML +=
+          `
+            <li class="card-item">
+              <div class="product-info">
+                <span class="item-name">${item.title}</span>
+                <div>
+                  <span class="item-piece">${item.quantity}x</span>
+                  <span class="item-price">${item.price}</span>
+                  <span class="item-total">$${item.quantity * item.price}</span>
+                </div>
+              </div>
+              <button class="remove-btn"><img src="assets/img/remove-btn.svg" alt=""></button>
+            </li>
+          `
+        }
+      }
+    } 
+  }
 }
 
-function productControl(count) {
-  minusBtn.addEventListener('click', function() {
-    count--;
-  })
-}
+const orderTotal = document.querySelector(".order-total").children[1];
+  
 
-// function takeOrder(productImg, count) {
-//   const productInfo = productImg.parentElement.parentElement;
-//   console.log(productInfo);
-//   let total = 5;
-//   emptyBasket.style.display = "none"
-//   order.style.display = "block"
-//   cardItems.innerHTML +=
-//   `
-//     <li class="card-item">
-//       <div class="product-info">
-//         <span class="item-name">${productInfo.children[3]}</span>
-//         <div>
-//           <span class="item-piece">${count}x</span>
-//           <span class="item-price">${productInfo.childNodes[4]}</span>
-//           <span class="item-total">${total}</span>
-//         </div>
-//       </div>
-//       <button class="remove-btn"><img src="assets/img/remove-btn.svg" alt=""></button>
-//     </li>
-//   `
-// }
+
