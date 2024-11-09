@@ -189,8 +189,8 @@ function handleAddBtn() {
 
 
   for (const item of basket) {
-    total += item.quantity;
-    totalPrice += (item.quantity * item.price)
+    total = 0;
+    totalPrice = 0;
     if(productTitle.innerText === item.title) {
       item.quantity++;
       cardItems.innerHTML = "";
@@ -215,6 +215,8 @@ function handleAddBtn() {
       cardImg.classList.add("active");
       for(const item of basket ) {
         if(item.quantity > 0) {
+          total += item.quantity;
+          totalPrice += (item.quantity * item.price)
           emptyBasket.style.display = "none"
           order.style.display = "block"
           cardItems.innerHTML +=
@@ -234,16 +236,17 @@ function handleAddBtn() {
           const removeBtns = document.querySelectorAll(".remove-btn");
           for (const removeBtn of removeBtns) {
             removeBtn.addEventListener("click", function() {
-              this.parentElement.remove();
+              console.log(this.parentElement.children[0].children[1].children[2].innerText);
+              // total -= 
+              // this.parentElement.remove();
             });           
           }
         }
       }
-      total += item.quantity;
-      totalPrice += (item.quantity * item.price)
+
       const orderTotal = document.querySelector(".order-total").children[1];
       orderTotal.innerHTML = `$${totalPrice}`
-      totalPrice = 0;
+      // totalPrice = 0;
     } 
   }
 }
@@ -254,10 +257,13 @@ confirmBtn.addEventListener('click', completedOrder)
 function completedOrder() {
   const orderSummary = document.querySelector(".order-summary");
   let lastOrder = cardItems.innerHTML;
+  // const removeButtons = document.querySelectorAll(".remove-btn");
+  // removeButtons.forEach(button => button.remove());
   lastOrder = lastOrder.replace(/<div class="product-info">/g, `
     <div class="product-info">
-      <img src="assets/img/baklava.png" alt="Product Image">
-  `);
+    <img src="assets/img/baklava.png" alt="Product Image">
+    `);
+  // console.log(lastOrder);
   orderSummary.innerHTML = lastOrder
 
 

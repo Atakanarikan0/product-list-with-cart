@@ -342,7 +342,7 @@ dialog {
     padding: 40px;
     border-radius: 12px;
     margin: auto;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 }
 @media (width > 768px) {
