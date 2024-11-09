@@ -252,6 +252,73 @@ h2 {
   border-radius: 30px;
 }
 
+/* Dialog */
+dialog::backdrop {
+  background: #00000080;
+}
+dialog {
+  padding: 40px 24px;
+  min-width: 375px;
+  border: 0;
+  border-radius: 12px 12px 0 0 ;
+  margin-top: auto;
+  /* margin-inline: auto; */
+  /* overflow: hidden; */
+  /* margin-top: 95px; */
+
+  h2 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 48px;
+    color: #260F08;
+    margin-top: 24px;
+  }
+  p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.17px;
+    color: #87635A;
+    margin-top: 8px;
+  }
+  button {
+    color: #FFF;
+    background-color: #C73B0F;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 21.17px;
+    border: none;
+    width: 100%;
+    padding-block: 16px;
+    border-radius: 30px;
+    margin-top: 32px;
+  }
+  img {
+    width: 48px;
+    height: 48px;
+  }
+  ul {
+    background: #FCF8F6;
+    padding: 24px;
+    margin-top: 32px;
+    border-radius: 8px;
+    li{
+      display: flex;
+      .product-info {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        > div {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          .item-name {
+            grid-column: span 2;
+          }
+        }
+      }
+    }
+  }
+}
+
 
 
 
@@ -270,6 +337,12 @@ h2 {
     .btn-add-cart {
       left: 26px;
     }
+  }
+  dialog {
+    padding: 40px;
+    border-radius: 12px;
+    margin: auto;
+    overflow: hidden;
   }
 }
 @media (width > 768px) {
