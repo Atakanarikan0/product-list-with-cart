@@ -4,7 +4,7 @@ let desserts = [
      title: "Waffle with Berries",
      category: "Waffle",
      price: "6.50",
-     stock: "10",
+     stock: 10,
      img:"assets/img/waffle.png",
   },
   {
@@ -12,7 +12,7 @@ let desserts = [
     title: "Vanilla Bean Crème Brûlée",
     category: "Crème Brûlée",
     price: "7.00",
-    stock: "10",
+    stock: 10,
     img:"assets/img/vanilla-bean.png",
   },
   {
@@ -20,7 +20,7 @@ let desserts = [
     title: "Macaron Mix of Five",
     category: "Macaron",
     price: "8.00",
-    stock: "10",
+    stock: 10,
     img:"assets/img/macaron.png",
   },
   {
@@ -28,7 +28,7 @@ let desserts = [
     title: "Classic Tiramisu",
     category: "Tiramisu",
     price: "5.50",
-    stock: "10",
+    stock: 10,
     img:"assets/img/tiramisu.png",
   },
   {
@@ -36,7 +36,7 @@ let desserts = [
     title: "Pistachio Baklava",
     category: "Baklava",
     price: "4.00",
-    stock: "10",
+    stock: 10,
     img:"assets/img/baklava.png",
   },
   {
@@ -44,7 +44,7 @@ let desserts = [
     title: "Lemon Meringue Pie",
     category: "Pie",
     price: "5.00",
-    stock: "10",
+    stock: 10,
     img:"assets/img/lemon-meringue.png",
   },
   {
@@ -52,7 +52,7 @@ let desserts = [
     title: "Red Velvet Cake",
     category: "Cake",
     price: "4.50",
-    stock: "10",
+    stock: 10,
     img:"assets/img/red-velvet.png",
   },
   {
@@ -60,7 +60,7 @@ let desserts = [
     title: "Salted Caramel Brownie",
     category: "Brownie",
     price: "5.50",
-    stock: "10",
+    stock: 10,
     img:"assets/img/brownie.png",
   },
   {
@@ -68,7 +68,7 @@ let desserts = [
     title: "Vanilla Panna Cotta",
     category: "Panna Cotta",
     price: "6.50",
-    stock: "10",
+    stock: 10,
     img:"assets/img/panna-cotta.png",
   },
 ];
@@ -172,11 +172,27 @@ const cardItems = document.querySelector(".card-items");
 function handleAddBtn() {
   let productTitle = this.parentElement.parentElement.children[2];
   // let dessertPrice = this.parentElement.parentElement.children[4];
+
+  for (const dessert of desserts) {
+    if(productTitle.innerText === dessert.title) {
+      dessert.stock--;
+      if(dessert.stock <= 0) {
+        outOfStock.showModal()
+        exitBtn.addEventListener('click', function() {
+          outOfStock.close();
+        })
+        this.disabled = true;
+      }
+    }
+  }
+
+
+
   for (const item of basket) {
+    total += item.quantity;
+    totalPrice += (item.quantity * item.price)
     if(productTitle.innerText === item.title) {
       item.quantity++;
-      // total += item.quantity;
-      // totalPrice += (item.quantity * item.price)
       cardItems.innerHTML = "";
 
       this.innerHTML = 
@@ -185,6 +201,15 @@ function handleAddBtn() {
       ${item.quantity}
       <button id="plusBtn"><img src="assets/img/plus-icon.svg" alt=""></button>
       `
+      // MinusBtn 
+      // minusBtn.addEventListener('click', function(){
+      //   if(item.quantity > 1) {
+      //     item.quantity--;
+      //   }else {
+      //     item.quantity = 0;
+      //   }
+      // })
+      // MinusBtn end
       this.classList.add("active-btn"); 
       const cardImg = this.parentElement.querySelector(".card-img");
       cardImg.classList.add("active");
@@ -206,13 +231,40 @@ function handleAddBtn() {
               <button class="remove-btn"><img src="assets/img/remove-btn.svg" alt=""></button>
             </li>
           `
+          const removeBtns = document.querySelectorAll(".remove-btn");
+          for (const removeBtn of removeBtns) {
+            removeBtn.addEventListener("click", function() {
+              this.parentElement.remove();
+            });           
+          }
         }
       }
+      total += item.quantity;
+      totalPrice += (item.quantity * item.price)
+      const orderTotal = document.querySelector(".order-total").children[1];
+      orderTotal.innerHTML = `$${totalPrice}`
+      totalPrice = 0;
     } 
   }
 }
 
-const orderTotal = document.querySelector(".order-total").children[1];
-  
+
+confirmBtn.addEventListener('click', completedOrder)
+
+function completedOrder() {
+  const orderSummary = document.querySelector(".order-summary");
+  let lastOrder = cardItems.innerHTML;
+  lastOrder = lastOrder.replace(/<div class="product-info">/g, `
+    <div class="product-info">
+      <img src="assets/img/baklava.png" alt="Product Image">
+  `);
+  orderSummary.innerHTML = lastOrder
+
+
+  orderDialog.showModal()
+  newOrderBtn.addEventListener('click', function() {
+    location.reload();
+  })
+}
 
 
